@@ -28,6 +28,9 @@ const UserSchema  = mongoose.Schema({
         type: String,
         required: true,
         minlength: 5
+    },
+    refreshToken: {
+        type: String
     }
 });
 
