@@ -6,6 +6,11 @@ dotenv.config({
     path: "./.env"
 });
 
+app.get("/", (req, res) => {
+    res.send("Hello");
+})
+
+
 connectDB()
 .then(() => {
     app.listen(process.env.PORT || 8000, () => {

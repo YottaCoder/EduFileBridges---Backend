@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import validator, { isEmail } from "validator";
+import validator from "validator";
 import jwt from "jsonwebtoken";
 import  bcrypt from "bcrypt";
 
@@ -19,7 +19,7 @@ const UserSchema  = mongoose.Schema({
         trim: true,
         validate: {
             validator: function(v) {
-                return isEmail(v);
+                return validator.isEmail(v);
             },
             message: "Please enter a valid email"
         }
