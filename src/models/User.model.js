@@ -8,15 +8,13 @@ const UserSchema  = mongoose.Schema({
         type: String,
         required: true,
         minlength: 3,
-        unique: [true, "This Username Already Used !!"]
+        unique: false
     },
     email: {
         type: String,
         required: [true, "Email required"],
         unique: [true, "Email is Already USed!!"],
-        lowercase: true,
         uppercase: false,
-        trim: true,
         validate: {
             validator: function(v) {
                 return validator.isEmail(v);

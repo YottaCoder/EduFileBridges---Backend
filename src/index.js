@@ -10,6 +10,10 @@ app.get("/", (req, res) => {
     res.send("Hello");
 })
 
+app.get("/api/v1/User/register", (req, res) => {
+    res.send("Register page")
+})
+
 
 connectDB()
 .then(() => {

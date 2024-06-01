@@ -3,44 +3,37 @@ import { ApiError } from "../utils/ApiError.js";
 import { UserModel } from "../models/User.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+import mongoose from "mongoose";
 
-const registerUser = asyncHandler ( async (req, res) => {
-    const {username, email, password} = req.body 
+const registerUser = asyncHandler(async (req, res) => {
+    const { username, email, password } = req.body;
 
-    if(
-        [username, email, password].some((field) => 
-            field?.trim() ==="" )
-    ){
-        throw new ApiError(400, "All Fields are required")
+    if ([username, email, password].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All Fields are required");
     }
 
-    const existedUser = await UserModel.findOne({
-        email
-    })
+    const existedUser = await UserModel.findOne({ email });
 
     if (existedUser) {
-        throw new ApiError(409, "User Alredy Exists")
+        throw new ApiError(409, "User Already Exists");
     }
 
+    const createdUser = await UserModel.create({ username, email, password });
 
-    const User = UserModel.create({
-        username,
-        email,
-        password
-    })
+    if (!createdUser) {
+        throw new ApiError(500, "Something went wrong while user Register");
+    }
 
-    const createdUser = await User.findById(User._id).select(
-        "-password -refreshToken"
-    )
+    // Fetch the created user by its _id
+    const fetchedUser = await UserModel.findById(createdUser._id).select("-password -refreshToken");
 
-    if(createdUser){
-        throw new ApiError(500, "Something went wrong while user Register")
+    if (!fetchedUser) {
+        throw new ApiError(500, "Something went wrong while fetching the created user");
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User Registered Successfully")
-    )
+        new ApiResponse(200, fetchedUser, "User Registered Successfully")
+    );
+});
 
-})
-
-export { registerUser }
+export { registerUser };
