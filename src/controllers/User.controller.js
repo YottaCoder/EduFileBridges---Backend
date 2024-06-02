@@ -3,7 +3,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { UserModel } from "../models/User.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-import mongoose from "mongoose";
 
 const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -36,4 +35,24 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser };
+const loginUser = asyncHandler( async (req, res) => {
+
+        const { email, password} = req.body;
+
+        if ([username, email, password].some((field) => field?.trim() === "")) {
+            throw new ApiError(400, "All Fields are required");
+        }
+    
+        const existedUser = await UserModel.findOne({ email });
+
+        if(!existedUser){
+            throw new ApiError(404, "User Not Found");
+        }
+
+        return res.status(201).json(
+            new ApiResponse(200, existedUser, "User Found")
+        );
+
+});
+
+export { registerUser, loginUser };
