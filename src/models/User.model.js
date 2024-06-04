@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import  bcrypt from "bcrypt";
@@ -30,7 +30,7 @@ const UserSchema  = mongoose.Schema({
     refreshToken: {
         type: String
     }
-});
+}, {timestamp : true} );
 
 
 //Password Hasing
