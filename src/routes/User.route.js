@@ -9,7 +9,7 @@ router.route("/register").post(registerUser)
 router.route("/login").post(loginUser);
 
 //Seccured Routes
-router.route("Logout").post(verifyJWT, logoutUser);
+router.route("/logout").post(verifyJWT, logoutUser);
 
 
 export { router };

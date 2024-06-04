@@ -6,7 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const generateAccessTokensAndRefreshTokens = async(userId) => {
     try {
-            const user =  await User.findById(userId);
+            const user =  await UserModel.findById(userId);
             const accessToken = await user.generateAccessToken()
             const refreshToken = await user.generateRefreshToken()
 
@@ -16,6 +16,7 @@ const generateAccessTokensAndRefreshTokens = async(userId) => {
             return { accessToken, refreshToken }
 
     } catch (error) {
+        console.error(error);
         throw new ApiError(500, "Something went wrong while generating refresh and access token")
     }
 }
@@ -73,7 +74,7 @@ const loginUser = asyncHandler( async (req, res) => {
 
         const { accessToken, refreshToken } =  await generateAccessTokensAndRefreshTokens(User._id);
 
-        const loggedInUser = await User.findById(User._id)
+        const loggedInUser = await UserModel.findById(User._id)
         .select(" -password -refreshToken ")
 
         const option = {
@@ -97,8 +98,8 @@ const loginUser = asyncHandler( async (req, res) => {
 
 });
 
-const logoutUser = asyncHandler( async(req, _) => {
-    await User.findByIdAndUpdate(
+const logoutUser = asyncHandler( async(req, res) => {
+    await UserModel.findByIdAndUpdate(
         req.User._id,
         {
             $set: {
