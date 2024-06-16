@@ -99,9 +99,11 @@ const loginUser = asyncHandler( async (req, res) => {
 
 });
 
-const logoutUser = asyncHandler( async(req, res) => {
-    await UserModel.findByIdAndUpdate(
-        req.User._id,
+const logoutUser = asyncHandler(async (req, res) => {
+    console.log(`Logging out user with ID: ${req.user._id}`);
+    
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        req.user._id,
         {
             $set: {
                 refreshToken: undefined
@@ -110,20 +112,22 @@ const logoutUser = asyncHandler( async(req, res) => {
         {
             new: true
         }
-    )
+    );
 
+    console.log(`Updated User: ${updatedUser}`);
+    
     const option = {
         httpOnly: true,
         secure: true
-    }
+    };
 
     return res
-    .status(200)
-    .clearCookie("accessToken", option)
-    .clearCookie("refreshToken", option)
-    .json(new ApiResponse(200, "User Logout"))
-
+        .status(200)
+        .clearCookie("accessToken", option)
+        .clearCookie("refreshToken", option)
+        .json(new ApiResponse(200, "User Logout"));
 });
+
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken;
@@ -196,7 +200,6 @@ const getCurrentUser = asyncHandler( async(req, res) => {
     .status(200)
     .json(200, req.user, "Current user fetched successfully")
 })
-
 
 export { 
     registerUser,

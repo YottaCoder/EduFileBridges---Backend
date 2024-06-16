@@ -28,7 +28,9 @@ const UserSchema  = mongoose.Schema({
         minlength: 5
     },
     refreshToken: {
-        type: String
+        type: String,
+        default: null,
+        required: false
     }
 }, {timestamp : true} );
 
