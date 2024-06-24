@@ -23,9 +23,9 @@ const generateAccessTokensAndRefreshTokens = async(userId) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { fullName, email, password } = req.body;
 
-    if ([username, email, password].some((field) => field?.trim() === "")) {
+    if ([fullName, email, password].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All Fields are required");
     }
 
@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User Already Exists");
     }
 
-    const createdUser = await UserModel.create({ username, email, password });
+    const createdUser = await UserModel.create({ fullName, email, password });
 
     if (!createdUser) {
         throw new ApiError(500, "Something went wrong while user Register");
