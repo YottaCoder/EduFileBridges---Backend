@@ -12,19 +12,19 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendOTP = async (req, res) => {
-  // const { email } = req.body;
+  const { email } = req.body;
 
-  // if (!email) {
-  //   console.log('No email provided');
-  //   return res.status(400).json({ message: 'Email is required' });
-  // }
+  if (!email) {
+    console.log('No email provided');
+    return res.status(400).json({ message: 'Email is required' });
+  }
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
   console.log('Generated OTP:', otp);
 
   const mailOptions = {
     from: 'edufilebridge1@gmail.com',
-    to: 'solankirohit8703@gmail.com',
+    to: email, // Use the provided email from the request body
     subject: 'Your OTP Code',
     html: `<h1>Your OTP Code is ${otp}</h1>`
   };
